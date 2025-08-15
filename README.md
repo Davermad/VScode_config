@@ -2,4 +2,5 @@
 
 Minimalistic configuration for VSCode.
 
-Command to install extensions: xargs -n 1 code --install-extension < extensions.txt
+Command to install extensions: `xargs -n 1 code --install-extension < extensions.txt`
+
