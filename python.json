@@ -1,0 +1,36 @@
+{
+  "Celery clear expired sessions": {
+    "prefix": "celery-clean-sessions",
+    "body": [
+      "from celery import shared_task",
+      "from django.utils import timezone",
+      "from django.contrib.sessions.models import Session",
+      "",
+      "@shared_task",
+      "def clear_expired_sessions():",
+      "    deleted, _ = Session.objects.filter(expire_date__lt=timezone.now()).delete()",
+      "    return f\"Удалено {deleted} старых сессий\""
+    ],
+    "description": "Celery таска для очистки старых сессий в Django"
+  },
+    "Celery Basic Task": {
+    "prefix": "celerytask",
+    "body": [
+      "from celery import Celery",
+      "",
+      "# создаём приложение Celery",
+      "app = Celery(main=\"task\", broker=\"redis://localhost:6379/0\")",
+      "",
+      "# регистрируем простую задачу",
+      "@app.task",
+      "def add(x: int, y: int) -> int:",
+      "    return x + y",
+      "",
+      "if __name__ == \"__main__\":",
+      "    # отправляем задачу асинхронно",
+      "    result = add.delay(4, 4)",
+      "    print(f\"Задача отправлена, ID: {result.id}\")"
+    ],
+    "description": "Базовый пример Celery таски с add(x, y)"
+  }
+}
