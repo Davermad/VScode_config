@@ -32,5 +32,47 @@
       "    print(f\"Задача отправлена, ID: {result.id}\")"
     ],
     "description": "Базовый пример Celery таски с add(x, y)"
+  },
+    "Celery Django core": {
+    "prefix": "celery-core",
+    "body": [
+      "import os",
+      "from celery import Celery",
+      "",
+      "os.environ.setdefault(\"DJANGO_SETTINGS_MODULE\", \"project.settings\")",
+      "",
+      "app = Celery(\"project\")",
+      "app.config_from_object(\"django.conf:settings\", namespace=\"CELERY\")",
+      "app.autodiscover_tasks()"
+    ],
+    "description": "Celery configuration for Django core (celery.py)"
+  },
+  
+  "Celery __init__.py": {
+    "prefix": "celery-init",
+    "body": [
+      "from .celery import app as celery_app",
+      "",
+      "__all__ = (\"celery_app\",)"
+    ],
+    "description": "Celery __init__.py snippet for Django project"
+  },
+  
+  "Celery settings.py": {
+    "prefix": "celery-settings",
+    "body": [
+      "CELERY_BROKER_URL = \"redis://localhost:6379/0\"",
+      "CELERY_RESULT_BACKEND = \"redis://localhost:6379/0\"",
+      "",
+      "from celery.schedules import crontab",
+      "",
+      "CELERY_BEAT_SCHEDULE = {",
+      "    \"clear-sessions-daily\": {",
+      "        \"task\": \"app.tasks.clear_expired_sessions\",",
+      "        \"schedule\": crontab(hour=0, minute=0),  # каждый день в полночь",
+      "    },",
+      "}"
+    ],
+    "description": "Celery settings for Django with daily clear expired sessions task"
   }
 }
